@@ -1,6 +1,9 @@
-import 'package:cuaca/providers/cuaca_provider.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/cuaca_provider.dart';
 
 class CuacaScreen extends StatefulWidget {
   const CuacaScreen({Key? key}) : super(key: key);
@@ -17,49 +20,51 @@ class _CuacaScreenState extends State<CuacaScreen> {
         title: Text('Aplikasi Cuaca'),
       ),
       body: Consumer<CuacaProvider>(
-        builder: (context, provider, _) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  '${provider.cuacaModel.main?.temp ?? '-'} C',
-                  style: TextStyle(
-                    fontSize: 60,
-                  ),
+        builder: (context, provider, child) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '${provider.cuacamodel.main!.temp}',
+                style: TextStyle(
+                  fontSize: 80,
+                  color: Colors.red,
                 ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.network(
-                    'http://openweathermap.org/img/w/${provider.cuacaModel.weather?.first.icon ?? ''}.png',
-                    fit: BoxFit.cover,
-                  ),
+              ),
+              SizedBox(
+                width: 250,
+                height: 250,
+                child: Image.network(
+                  'https://openweathermap.org/img/w/${provider.cuacamodel.weather![0].icon}.png',
+                  fit: BoxFit.cover,
                 ),
-                Text(
-                  '${provider.cuacaModel.name ?? '-'}',
-                  style: TextStyle(
-                    fontSize: 60,
-                  ),
+              ),
+              Text(
+                '${provider.cuacamodel.name}',
+                style: TextStyle(
+                  fontSize: 60,
                 ),
-                TextFormField(
-                  controller: provider.inputcity,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Masukkan nama kota',
-                  ),
+              ),
+              TextFormField(
+                controller: provider.inputnamakota,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
                 ),
-                TextButton(
-                  onPressed: () => provider.tampilkanDataCuaca(
-                      city: provider.inputcity.text),
-                  child: Text('Tampilkan Data'),
+                decoration: InputDecoration(
+                  hintText: 'Masukkan nama kota',
                 ),
-              ],
-            ),
+              ),
+              TextButton(
+                onPressed: () {
+                  provider.tampikanDataCuaca(
+                      inputnamakota: provider.inputnamakota.text);
+                  provider.inputnamakota.clear();
+                },
+                child: Text('Tampilkan Data'),
+              ),
+            ],
           );
         },
       ),

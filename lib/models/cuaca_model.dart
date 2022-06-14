@@ -199,7 +199,7 @@ class Wind {
 }
 
 class Rain {
-  double? d1h;
+  var d1h;
 
   Rain({this.d1h});
 
